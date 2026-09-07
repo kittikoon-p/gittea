@@ -80,17 +80,17 @@
 <body>
 
     <h1>คู่มือการติดตั้ง Gitea บน AlmaLinux</h1>
-    <p class="subtitle">ระบบติดตั้งแบบ Step-by-Step พร้อมแนวทางป้องกันและแก้ไข Error ที่พบบ่อย[cite: 3, 4]</p>
+    <p class="subtitle">ระบบติดตั้งแบบ Step-by-Step พร้อมแนวทางป้องกันและแก้ไข Error ที่พบบ่อย</p>
 
     <!-- ส่วนที่ 1: ข้อมูลเบื้องต้น -->
     <div class="section-box">
         <h2>1. Gitea คืออะไร</h2>
-        <p>Gitea คือระบบจัดการโค้ดผ่าน Git แบบโฮสต์เอง (Self-hosted Git service) ที่มีขนาดเล็ก น้ำหนักเบา และกินทรัพยากรเครื่องน้อยมาก มีฟังก์ชันการทำงานคล้ายกับ GitHub หรือ GitLab เหมาะสำหรับนำมาติดตั้งบนเซิร์ฟเวอร์ส่วนตัวหรือใช้ทำโปรเจกต์กลุ่ม[cite: 3]</p>
+        <p>Gitea คือระบบจัดการโค้ดผ่าน Git แบบโฮสต์เอง (Self-hosted Git service) ที่มีขนาดเล็ก น้ำหนักเบา และกินทรัพยากรเครื่องน้อยมาก มีฟังก์ชันการทำงานคล้ายกับ GitHub หรือ GitLab เหมาะสำหรับนำมาติดตั้งบนเซิร์ฟเวอร์ส่วนตัวหรือใช้ทำโปรเจกต์กลุ่ม</p>
         <ul>
-            <li><strong>Private Repository:</strong> พื้นที่เก็บโค้ดส่วนตัว ควบคุมสิทธิ์การเข้าถึงได้ปลอดภัย[cite: 3]</li>
-            <li><strong>Pull Request & Code Review:</strong> ระบบช่วยตรวจสอบโค้ดและคอมเมนต์ก่อนรวมเข้า Branch หลัก[cite: 3]</li>
-            <li><strong>Issue Tracking & Kanban:</strong> ระบบจัดการปัญหาและติดตามสถานะงานแบบบอร์ด[cite: 3]</li>
-            <li><strong>Lightweight:</strong> ใช้ทรัพยากร (RAM/CPU) น้อยมาก รันบนคอมพิวเตอร์ทั่วไปได้ราบรื่น[cite: 3]</li>
+            <li><strong>Private Repository:</strong> พื้นที่เก็บโค้ดส่วนตัว ควบคุมสิทธิ์การเข้าถึงได้ปลอดภัย</li>
+            <li><strong>Pull Request & Code Review:</strong> ระบบช่วยตรวจสอบโค้ดและคอมเมนต์ก่อนรวมเข้า Branch หลัก</li>
+            <li><strong>Issue Tracking & Kanban:</strong> ระบบจัดการปัญหาและติดตามสถานะงานแบบบอร์ด</li>
+            <li><strong>Lightweight:</strong> ใช้ทรัพยากร (RAM/CPU) น้อยมาก รันบนคอมพิวเตอร์ทั่วไปได้ราบรื่น</li>
         </ul>
     </div>
 
@@ -99,8 +99,8 @@
         <h2>2. การแก้ไขปัญหาการติดตั้ง Gitea (ตัวกัน/แก้ Error)</h2>
         
         <div class="error-box">
-            <strong>ปัญหาที่ 1: เข้าเว็บไซต์พอร์ต 3000 ไม่ได้ (Connection Refused)[cite: 3]</strong><br>
-            วิธีแก้ไข: สตาร์ทเซอร์วิสและเปิดพอร์ต Firewall[cite: 3]
+            <strong>ปัญหาที่ 1: เข้าเว็บไซต์พอร์ต 3000 ไม่ได้ (Connection Refused)</strong><br>
+            วิธีแก้ไข: สตาร์ทเซอร์วิสและเปิดพอร์ต Firewall
             <div class="code-container" style="margin-top: 8px;">
                 <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
                 <pre><code>sudo systemctl start gitea
@@ -110,8 +110,8 @@ sudo firewall-cmd --reload</code></pre>
         </div>
 
         <div class="error-box" style="margin-top: 15px;">
-            <strong>ปัญหาที่ 2: ติดตั้งแล้วขึ้น Error Status 203/EXEC (Permission Denied)[cite: 3]</strong><br>
-            วิธีแก้ไข: กำหนดสิทธิ์รันไฟล์และปรับ Context ของ SELinux[cite: 3]
+            <strong>ปัญหาที่ 2: ติดตั้งแล้วขึ้น Error Status 203/EXEC (Permission Denied)</strong><br>
+            วิธีแก้ไข: กำหนดสิทธิ์รันไฟล์และปรับ Context ของ SELinux
             <div class="code-container" style="margin-top: 8px;">
                 <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
                 <pre><code>sudo chmod +x /usr/local/bin/gitea
@@ -171,12 +171,12 @@ gitea --version</code></pre>
         </div>
 
         <h3>ขั้นที่ 5: สร้าง Service ให้ Gitea (Systemd)</h3>
-        <p>สร้างไฟล์ Service[cite: 4]:</p>
+        <p>สร้างไฟล์ Service:</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
             <pre><code>sudo nano /etc/systemd/system/gitea.service</code></pre>
         </div>
-        <p>นำค่าคอนฟิกนี้ใส่ลงไปในไฟล์[cite: 4]:</p>
+        <p>นำค่าคอนฟิกนี้ใส่ลงไปในไฟล์:</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
             <pre><code>[Unit]
@@ -216,18 +216,18 @@ sudo firewall-cmd --list-ports</code></pre>
         </div>
 
         <h3>ขั้นที่ 8 & 9: เข้าเว็บ Gitea และตั้งค่าเบื้องต้น</h3>
-        <p>เปิดเบราว์เซอร์แล้วเข้าสู่: <code>http://&lt;IP_Address_เครื่อง_AlmaLinux&gt;:3000</code>[cite: 4]</p>
+        <p>เปิดเบราว์เซอร์แล้วเข้าสู่: <code>http://&lt;IP_Address_เครื่อง_AlmaLinux&gt;:3000</code></p>
         <ul>
-            <li><strong>Database Type:</strong> เลือก <code>SQLite3</code> (สะดวกรวดเร็ว ไม่ต้องตั้งค่าพอร์ต 5432 หรือรหัสผ่านเพิ่มเติม)[cite: 3, 4]</li>
-            <li><strong>Path:</strong> <code>/var/lib/gitea/data/gitea.db</code>[cite: 4]</li>
-            <li>คลิกปุ่ม <strong>"Install Gitea"</strong> เพื่อสิ้นสุดการติดตั้ง[cite: 4]</li>
+            <li><strong>Database Type:</strong> เลือก <code>SQLite3</code> (สะดวกรวดเร็ว ไม่ต้องตั้งค่าพอร์ต 5432 หรือรหัสผ่านเพิ่มเติม)</li>
+            <li><strong>Path:</strong> <code>/var/lib/gitea/data/gitea.db</code></li>
+            <li>คลิกปุ่ม <strong>"Install Gitea"</strong> เพื่อสิ้นสุดการติดตั้ง</li>
         </ul>
     </div>
 
     <!-- ส่วนที่ 4: คำสั่ง Git พื้นฐาน -->
     <div class="section-box">
         <h2>4. คำสั่ง Git พื้นฐานสำหรับใช้งานร่วมกับ Gitea</h2>
-        <p>หลังจากสร้าง Repository บนเว็บ Gitea สำเร็จแล้ว ให้รันคำสั่งเหล่านี้ใน Terminal[cite: 3]:</p>
+        <p>หลังจากสร้าง Repository บนเว็บ Gitea สำเร็จแล้ว ให้รันคำสั่งเหล่านี้ใน Terminal:</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
             <pre><code># 1. สร้างไฟล์และคอมมิตแรก
