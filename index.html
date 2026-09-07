@@ -232,19 +232,16 @@ sudo firewall-cmd --list-ports</code></pre>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
             <pre><code># 1. สร้างไฟล์และคอมมิตแรก
+mkdir test
+cd test
+touch README.md
 git init
 git checkout -b main
-===================================
-nano README.md
-===================================
-<ชื่อเล่น>
-
-CTRL+O  CTRL+X เพื่อออก
-
 git add README.md
 git commit -m "first commit"
-git remote add origin <ใส่ github ของตัวเอง>
-git push -u origin main</code></pre>
+git remote add origin http://192.168.1.115:3000/kittikoon/kittikoon.git 
+git push -u origin main
+            </code></pre>
         </div>
     </div>
 
