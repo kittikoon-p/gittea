@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการติดตั้ง Gitea บน AlmaLinux และการแก้ไขปัญหา</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f8;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 { text-align: center; color: #2e7d32; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        
+        .section-box {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        /* สไตล์สำหรับกล่องโค้ดและปุ่ม Copy */
+        .code-container {
+            position: relative;
+            background-color: #272822;
+            border-radius: 6px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        pre {
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            margin: 0;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background-color: #45a049; }
+
+        /* กล่องแจ้งเตือนวิธีแก้ Error */
+        .error-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+        }
+        .error-box strong { color: #856404; }
+        
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>คู่มือการติดตั้ง Gitea บน AlmaLinux</h1>
+    <p class="subtitle">ระบบติดตั้งแบบ Step-by-Step พร้อมแนวทางป้องกันและแก้ไข Error ที่พบบ่อย[cite: 3, 4]</p>
+
+    <!-- ส่วนที่ 1: ข้อมูลเบื้องต้น -->
+    <div class="section-box">
+        <h2>1. Gitea คืออะไร (สำหรับนำเสนอหน้าห้อง)</h2>
+        <p>Gitea คือระบบจัดการโค้ดผ่าน Git แบบโฮสต์เอง (Self-hosted Git service) ที่มีขนาดเล็ก น้ำหนักเบา และกินทรัพยากรเครื่องน้อยมาก มีฟังก์ชันการทำงานคล้ายกับ GitHub หรือ GitLab เหมาะสำหรับนำมาติดตั้งบนเซิร์ฟเวอร์ส่วนตัวหรือใช้ทำโปรเจกต์กลุ่ม[cite: 3]</p>
+        <ul>
+            <li><strong>Private Repository:</strong> พื้นที่เก็บโค้ดส่วนตัว ควบคุมสิทธิ์การเข้าถึงได้ปลอดภัย[cite: 3]</li>
+            <li><strong>Pull Request & Code Review:</strong> ระบบช่วยตรวจสอบโค้ดและคอมเมนต์ก่อนรวมเข้า Branch หลัก[cite: 3]</li>
+            <li><strong>Issue Tracking & Kanban:</strong> ระบบจัดการปัญหาและติดตามสถานะงานแบบบอร์ด[cite: 3]</li>
+            <li><strong>Lightweight:</strong> ใช้ทรัพยากร (RAM/CPU) น้อยมาก รันบนคอมพิวเตอร์ทั่วไปได้ราบรื่น[cite: 3]</li>
+        </ul>
+    </div>
+
+    <!-- ส่วนที่ 2: วิธีแก้ไขปัญหา (ตัวกัน Error) -->
+    <div class="section-box" style="border-top: 4px solid #e74c3c;">
+        <h2>2. การแก้ไขปัญหาการติดตั้ง Gitea (ตัวกัน/แก้ Error)</h2>
+        
+        <div class="error-box">
+            <strong>ปัญหาที่ 1: เข้าเว็บไซต์พอร์ต 3000 ไม่ได้ (Connection Refused)[cite: 3]</strong><br>
+            วิธีแก้ไข: สตาร์ทเซอร์วิสและเปิดพอร์ต Firewall[cite: 3]
+            <div class="code-container" style="margin-top: 8px;">
+                <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+                <pre><code>sudo systemctl start gitea
+sudo firewall-cmd --permanent --add-port=3000/tcp
+sudo firewall-cmd --reload</code></pre>
+            </div>
+        </div>
+
+        <div class="error-box" style="margin-top: 15px;">
+            <strong>ปัญหาที่ 2: ติดตั้งแล้วขึ้น Error Status 203/EXEC (Permission Denied)[cite: 3]</strong><br>
+            วิธีแก้ไข: กำหนดสิทธิ์รันไฟล์และปรับ Context ของ SELinux[cite: 3]
+            <div class="code-container" style="margin-top: 8px;">
+                <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+                <pre><code>sudo chmod +x /usr/local/bin/gitea
+sudo restorecon -v /usr/local/bin/gitea
+sudo systemctl daemon-reload
+sudo systemctl restart gitea</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 3: ขั้นตอนการติดตั้ง -->
+    <div class="section-box">
+        <h2>3. ขั้นตอนการติดตั้ง Gitea (Step-by-Step)</h2>
+
+        <h3>ขั้นที่ 1: ติดตั้ง Git และเครื่องมือที่จำเป็น</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo dnf update -y
+sudo dnf install -y git wget ca-certificates
+git --version</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 2: สร้าง User สำหรับ Gitea</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo groupadd --system git
+sudo useradd \
+--system \
+--shell /bin/bash \
+--comment "Git Version Control" \
+--gid git \
+--home-dir /home/git \
+--create-home \
+git
+id git</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 3: สร้างโฟลเดอร์สำหรับ Gitea</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo mkdir -p /var/lib/gitea/{custom,data,log}
+sudo chown -R git:git /var/lib/gitea
+sudo chmod -R 750 /var/lib/gitea
+sudo mkdir -p /etc/gitea
+sudo chown root:git /etc/gitea
+sudo chmod 770 /etc/gitea</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 4: ดาวน์โหลด Gitea</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>cd /tmp
+wget -O gitea https://dl.gitea.com/gitea/1.27.3/gitea-1.27.3-linux-amd64
+chmod +x gitea
+sudo mv gitea /usr/local/bin/gitea
+gitea --version</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 5: สร้าง Service ให้ Gitea (Systemd)</h3>
+        <p>สร้างไฟล์ Service[cite: 4]:</p>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo nano /etc/systemd/system/gitea.service</code></pre>
+        </div>
+        <p>นำค่าคอนฟิกนี้ใส่ลงไปในไฟล์[cite: 4]:</p>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>[Unit]
+Description=Gitea
+After=network.target
+
+[Service]
+RestartSec=2s
+Type=simple
+User=git
+Group=git
+WorkingDirectory=/var/lib/gitea
+ExecStart=/usr/local/bin/gitea web --config /etc/gitea/app.ini
+Restart=always
+Environment=USER=git
+Environment=HOME=/home/git
+Environment=GITEA_WORK_DIR=/var/lib/gitea
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 6: เปิดใช้งาน Service</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now gitea
+sudo systemctl status gitea</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 7: เปิด Firewall Port 3000</h3>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code>sudo firewall-cmd --permanent --add-port=3000/tcp
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-ports</code></pre>
+        </div>
+
+        <h3>ขั้นที่ 8 & 9: เข้าเว็บ Gitea และตั้งค่าเบื้องต้น</h3>
+        <p>เปิดเบราว์เซอร์แล้วเข้าสู่: <code>http://&lt;IP_Address_เครื่อง_AlmaLinux&gt;:3000</code>[cite: 4]</p>
+        <ul>
+            <li><strong>Database Type:</strong> เลือก <code>SQLite3</code> (สะดวกรวดเร็ว ไม่ต้องตั้งค่าพอร์ต 5432 หรือรหัสผ่านเพิ่มเติม)[cite: 3, 4]</li>
+            <li><strong>Path:</strong> <code>/var/lib/gitea/data/gitea.db</code>[cite: 4]</li>
+            <li>คลิกปุ่ม <strong>"Install Gitea"</strong> เพื่อสิ้นสุดการติดตั้ง[cite: 4]</li>
+        </ul>
+    </div>
+
+    <!-- ส่วนที่ 4: คำสั่ง Git พื้นฐาน -->
+    <div class="section-box">
+        <h2>4. คำสั่ง Git พื้นฐานสำหรับใช้งานร่วมกับ Gitea</h2>
+        <p>หลังจากสร้าง Repository บนเว็บ Gitea สำเร็จแล้ว ให้รันคำสั่งเหล่านี้ใน Terminal[cite: 3]:</p>
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">คัดลอก</button>
+            <pre><code># 1. สร้างไฟล์และคอมมิตแรก
+git init
+git checkout -b main
+===================================
+nano README.md
+===================================
+<ชื่อเล่น>
+
+CTRL+O  CTRL+X เพื่อออก
+
+git add README.md
+git commit -m "first commit"
+git remote add origin <ใส่ github ของตัวเอง>
+git push -u origin main</code></pre>
+        </div>
+    </div>
+
+    <!-- JavaScript สำหรับปุ่ม Copy -->
+    <script>
+        function copyCode(button) {
+            const pre = button.parentElement.querySelector('pre');
+            const code = pre.innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'คัดลอกแล้ว!';
+                button.style.backgroundColor = '#2e7d32';
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.backgroundColor = '#4CAF50';
+                }, 2000);
+            }).catch(err => {
+                console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
+            });
+        }
+    </script>
+
+</body>
+</html>
